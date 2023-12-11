@@ -1,13 +1,20 @@
 module motor(
     input clk,
     input rst,
-    input [3-1 :0]mode,
+    input [2:0]mode,
     output  [1:0]pwm
 );
 
     reg [9:0]next_left_motor, next_right_motor;
     reg [9:0]left_motor, right_motor;
     wire left_pwm, right_pwm;
+
+    parameter turn_left=3'b000;
+    parameter turn_right=3'b001;
+    parameter go_straight=3'b010;
+    parameter stop_state=3'b011;
+    parameter sharp_turn_left = 3'b100;
+    parameter sharp_turn_right = 3'b101;
 
     motor_pwm m0(clk, rst, left_motor, left_pwm);
     motor_pwm m1(clk, rst, right_motor, right_pwm);
@@ -22,15 +29,34 @@ module motor(
         end
     end
     
-    
     // [TO-DO] take the right speed for different situation
     always@(*)begin
-        // case (mode)
-        //     default:begin
-                next_left_motor=10'd511;//511 is the max duty cycle which is 50 %
-                next_right_motor=10'd511;
-        //    end
-        // endcase
+        case (mode)
+            turn_left: begin 
+                next_left_motor=10'd800;
+                next_right_motor=10'd800;
+            end 
+            turn_right: begin 
+                next_left_motor=10'd800; 
+                next_right_motor=10'd800;
+            end 
+            go_straight: begin 
+                next_left_motor=10'd1000;
+                next_right_motor=10'd1000;
+            end 
+            sharp_turn_left: begin 
+                next_left_motor=10'd600; // cannot be less than 50%
+                next_right_motor=10'd600;
+            end
+            sharp_turn_right: begin 
+                next_left_motor=10'd600; // cannot be less than 50%
+                next_right_motor=10'd600;
+            end
+            default:begin
+                next_left_motor=10'd1000;
+                next_right_motor=10'd1000;
+            end
+        endcase
     end
 
 
@@ -82,4 +108,3 @@ module PWM_gen (
         end
     end
 endmodule
-
