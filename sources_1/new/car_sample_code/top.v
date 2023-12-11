@@ -14,7 +14,7 @@ module Top(
 );
     //self added indicator to make sure the car is programmed with the newest code
     always@(*)begin
-        indicator=3'b111;
+        indicator=3'b101;
     end
     
     

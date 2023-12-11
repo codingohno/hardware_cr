@@ -13,9 +13,9 @@ module tracker_sensor(clk, reset, left_signal, right_signal, mid_signal, state);
     parameter go_straight=2'b10;
     parameter stop=2'b11;
 
-    always@(clk)begin
+    always@(posedge clk)begin
         if(reset)begin
-            state<=1'b0;
+            state<=2'b0;
         end
         else begin
             if(left_signal===1'b0)begin
@@ -27,12 +27,7 @@ module tracker_sensor(clk, reset, left_signal, right_signal, mid_signal, state);
             else begin
                 state<=go_straight;
             end
-
         end
-
     end
-
-
-
 
 endmodule
