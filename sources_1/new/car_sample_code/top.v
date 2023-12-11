@@ -16,17 +16,19 @@ module Top(
     debounce d0(rst_pb, rst, clk);
     onepulse d1(rst_pb, clk, Rst_n);
 
-    wire [1:0] state;
-    reg [3-1:0] mode;
-    parameter turn_left=2'b00;
-    parameter turn_right=2'b01;
-    parameter go_straight=2'b10;
-    parameter stop_state=2'b11;
+    wire [2:0] state;
+
+    parameter turn_left=3'b000;
+    parameter turn_right=3'b001;
+    parameter go_straight=3'b010;
+    parameter stop_state=3'b011;
+    parameter sharp_turn_left = 3'b100;
+    parameter sharp_turn_right = 3'b101;
 
     motor A(
         .clk(clk),
         .rst(Rst_n),
-        .mode(mode),
+        .mode(state),
         .pwm({left_motor, right_motor})
     );
 
@@ -50,8 +52,9 @@ module Top(
     always @(*) begin
         // [TO-DO] Use left and right to set your pwm
         // if(stop) {left, right} = 4'b0000;
-        // else  {left, right} = 4'b1010;
-        {left,right}=4'b1010;
+ 
+        if(stop) {left,right}=4'b0000;
+        else begin
         case(state)
             turn_left:begin
                 {left,right}=4'b0010;
@@ -59,6 +62,14 @@ module Top(
 
             turn_right:begin
                 {left,right}=4'b1000;
+            end
+
+            sharp_turn_left:begin 
+                {left,right}=4'b0110;
+            end 
+
+            sharp_turn_right:begin 
+                {left,right}=4'b1001;
             end
 
             go_straight:begin
@@ -73,6 +84,7 @@ module Top(
                 {left,right}=4'b0000;
             end
         endcase
+        end
     end
 
 endmodule
