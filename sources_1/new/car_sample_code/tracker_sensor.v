@@ -19,10 +19,10 @@ module tracker_sensor(clk, reset, left_signal, right_signal, mid_signal, state);
         end
         else begin
             if(!left_signal && !right_signal && !mid_signal) state <= stop_state;
-            else if(!left_signal && mid_signal) state <= go_right; //but slowly turn
-            else if(!right_signal && mid_signal) state <= go_left; //but slowly turn
-            else if(!left_signal) state <= go_right;
-            else if(!right_signal) state <= go_left;
+            else if(!left_signal && mid_signal) state <= turn_right; //but slowly turn
+            else if(!right_signal && mid_signal) state <= turn_left; //but slowly turn
+            else if(!left_signal) state <= turn_right;
+            else if(!right_signal) state <= turn_left;
             else state <= go_straight;
         end
     end
