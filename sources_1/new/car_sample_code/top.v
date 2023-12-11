@@ -16,7 +16,8 @@ module Top(
     debounce d0(rst_pb, rst, clk);
     onepulse d1(rst_pb, clk, Rst_n);
 
-    wire[1:0]  state;
+    wire [1:0] state;
+    reg [3-1:0] mode;
     parameter turn_left=2'b00;
     parameter turn_right=2'b01;
     parameter go_straight=2'b10;
@@ -25,16 +26,16 @@ module Top(
     motor A(
         .clk(clk),
         .rst(Rst_n),
-        //.mode(),
-        .pwm()
+        .mode(mode),
+        .pwm({left_motor, right_motor})
     );
 
     sonic_top B(
         .clk(clk), 
         .rst(Rst_n), 
         .Echo(echo), 
-        .Trig(),
-        .stop()
+        .Trig(trig),
+        .stop(stop)
     );
     
     tracker_sensor C(
