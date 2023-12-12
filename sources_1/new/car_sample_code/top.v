@@ -48,6 +48,7 @@ module Top(
         .state(state)
        );
 
+    
     always @(*) begin
         // [TO-DO] Use left and right to set your pwm
         // if(stop) {left, right} = 4'b0000;
@@ -56,24 +57,16 @@ module Top(
         else begin
         case(state)
             turn_left:begin
-                {left,right}=4'b0110;
+                {left,right}=4'b0010;
             end
             sharp_turn_left:begin
                 {left,right}=4'b0110;
             end
 
             turn_right:begin
-                {left,right}=4'b1001;
+                {left,right}=4'b1000;
             end
             sharp_turn_right:begin
-                {left,right}=4'b1001;
-            end
-
-            sharp_turn_left:begin 
-                {left,right}=4'b0110;
-            end 
-
-            sharp_turn_right:begin 
                 {left,right}=4'b1001;
             end
 

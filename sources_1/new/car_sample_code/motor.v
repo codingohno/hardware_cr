@@ -33,28 +33,28 @@ module motor(
     always@(*)begin
         case (mode)
             turn_left: begin 
-                next_left_motor=10'd800;
-                next_right_motor=10'd800;
+                next_left_motor=10'd1023;
+                next_right_motor=10'd1023;
             end 
             turn_right: begin 
-                next_left_motor=10'd800; 
-                next_right_motor=10'd800;
+                next_left_motor=10'd1023; 
+                next_right_motor=10'd1023;
             end 
             go_straight: begin 
-                next_left_motor=10'd1000;
-                next_right_motor=10'd1000;
+                next_left_motor=10'd1023;
+                next_right_motor=10'd1023;
             end 
             sharp_turn_left: begin 
-                next_left_motor=10'd600; // cannot be less than 50%
-                next_right_motor=10'd600;
+                next_left_motor=10'd1023; // cannot be less than 50%
+                next_right_motor=10'd1023;
             end
             sharp_turn_right: begin 
-                next_left_motor=10'd600; // cannot be less than 50%
-                next_right_motor=10'd600;
+                next_left_motor=10'd1023; // cannot be less than 50%
+                next_right_motor=10'd1023;
             end
             default:begin
-                next_left_motor=10'd1000;
-                next_right_motor=10'd1000;
+                next_left_motor=10'd1023;
+                next_right_motor=10'd1023;
             end
         endcase
     end
