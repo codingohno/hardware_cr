@@ -25,12 +25,12 @@ module motor(
     
     // [TO-DO] take the right speed for different situation
     always@(*)begin
-        // case (mode)
-        //     default:begin
+        case (mode)
+            default:begin
                 next_left_motor=10'd511;//511 is the max duty cycle which is 50 %
                 next_right_motor=10'd511;
-        //    end
-        // endcase
+           end
+        endcase
     end
 
 
