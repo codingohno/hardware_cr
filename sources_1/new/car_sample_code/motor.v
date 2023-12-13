@@ -1,11 +1,79 @@
+// module motor(
+//     input clk,
+//     input rst,
+//     input [2:0]mode,
+//     output  [1:0]pwm
+// );
+
+//     reg [9:0]next_left_motor, next_right_motor;
+//     reg [9:0]left_motor, right_motor;
+//     wire left_pwm, right_pwm;
+
+//     parameter turn_left=3'b000;
+//     parameter turn_right=3'b001;
+//     parameter go_straight=3'b010;
+//     parameter stop_state=3'b011;
+//     parameter sharp_turn_left = 3'b100;
+//     parameter sharp_turn_right = 3'b101;
+
+//     motor_pwm m0(clk, rst, left_motor, left_pwm);
+//     motor_pwm m1(clk, rst, right_motor, right_pwm);
+    
+//     always@(posedge clk)begin
+//         if(rst)begin
+//             left_motor <= 10'd0;
+//             right_motor <= 10'd0;
+//         end else begin
+//             left_motor <= next_left_motor;
+//             right_motor <= next_right_motor;
+//         end
+//     end
+    
+//     // [TO-DO] take the right speed for different situation
+//     always@(*)begin
+//         case (mode)
+//             turn_left: begin 
+//                 next_left_motor=10'd1023;
+//                 next_right_motor=10'd1023;
+//             end 
+//             turn_right: begin 
+//                 next_left_motor=10'd1023; 
+//                 next_right_motor=10'd1023;
+//             end 
+//             go_straight: begin 
+//                 next_left_motor=10'd1023;
+//                 next_right_motor=10'd1023;
+//             end 
+//             sharp_turn_left: begin 
+//                 next_left_motor=10'd1023; // cannot be less than 50%
+//                 next_right_motor=10'd1023;
+//             end
+//             sharp_turn_right: begin 
+//                 next_left_motor=10'd1023; // cannot be less than 50%
+//                 next_right_motor=10'd1023;
+//             end
+//             default:begin
+//                 next_left_motor=10'd1023;
+//                 next_right_motor=10'd1023;
+//             end
+//         endcase
+//     end
+
+
+//     assign pwm = {left_pwm, right_pwm};
+// endmodule
+
+//testing for new modulation
 module motor(
     input clk,
     input rst,
     input [2:0]mode,
-    output  [1:0]pwm
+    output  [1:0]pwm,
+    input [10-1:0] modulation_left,
+    input [10-1:0] modulation_right
 );
 
-    reg [9:0]next_left_motor, next_right_motor;
+    wire [9:0]next_left_motor, next_right_motor;//changed from reg to wire
     reg [9:0]left_motor, right_motor;
     wire left_pwm, right_pwm;
 
@@ -29,36 +97,10 @@ module motor(
         end
     end
     
-    // [TO-DO] take the right speed for different situation
-    always@(*)begin
-        case (mode)
-            turn_left: begin 
-                next_left_motor=10'd1023;
-                next_right_motor=10'd1023;
-            end 
-            turn_right: begin 
-                next_left_motor=10'd1023; 
-                next_right_motor=10'd1023;
-            end 
-            go_straight: begin 
-                next_left_motor=10'd1023;
-                next_right_motor=10'd1023;
-            end 
-            sharp_turn_left: begin 
-                next_left_motor=10'd1023; // cannot be less than 50%
-                next_right_motor=10'd1023;
-            end
-            sharp_turn_right: begin 
-                next_left_motor=10'd1023; // cannot be less than 50%
-                next_right_motor=10'd1023;
-            end
-            default:begin
-                next_left_motor=10'd1023;
-                next_right_motor=10'd1023;
-            end
-        endcase
-    end
-
+    //to do : nothing, but just assign
+    // modulation done by the outter modulation module
+    assign next_left_motor=modulation_left;
+    assign next_right_motor=modulation_right;
 
     assign pwm = {left_pwm, right_pwm};
 endmodule

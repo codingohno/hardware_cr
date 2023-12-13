@@ -239,7 +239,7 @@ module curvature_module (oot_done,oot_time,oot_side,clk,reset,modulation_left,mo
                         block_streak_right<=3'd0;
 
                         //update modulation
-                        modulation_right<=10'b1111111111-(10'd200/10'd5)*((block_streak_left+3'd1<=3'd5)?(block_streak_left+3'd1):3'd5);
+                        modulation_right<=10'b1111111111-(10'd300/10'd5)*((block_streak_left+3'd1<=3'd5)?({7'd0,block_streak_left}+10'd1):10'd5);
                         modulation_left<=10'b1111111111;
 
                     end
@@ -268,7 +268,7 @@ module curvature_module (oot_done,oot_time,oot_side,clk,reset,modulation_left,mo
 
                         //update modulation
                         modulation_right<=10'b1111111111;
-                        modulation_left<=10'b1111111111-(10'd200/10'd5)*((block_streak_right+3'd1<=3'd5)?(block_streak_right+3'd1):3'd5);
+                        modulation_left<=10'b1111111111-(10'd300/10'd5)*((block_streak_right+3'd1<=3'd5)?({7'd0,block_streak_right}+10'd1):10'd5);
 
                     end
                 end

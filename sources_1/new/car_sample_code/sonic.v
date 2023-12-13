@@ -2,8 +2,8 @@ module sonic_top(clk, rst, Echo, Trig, stop);
 	input clk, rst, Echo;
 	output Trig, stop;
 
-	wire[19:0] dis;
-	wire[19:0] d;
+	wire[29:0] dis;
+	//wire[19:0] d;
     wire clk1M;
 	wire clk_2_17;
 
@@ -13,13 +13,13 @@ module sonic_top(clk, rst, Echo, Trig, stop);
 
     // [TO-DO] calculate the right distance to trig stop(triggered when the distance is lower than 40 cm)
     // Hint: using "dis"
-    assign stop = (dis <= 4000) ? 1'b1 : 1'b0;
+    assign stop = (dis < 30'd4000) ? 1'b1 : 1'b0;
  
 endmodule
 
 module PosCounter(clk, rst, echo, distance_count); 
     input clk, rst, echo;
-    output[19:0] distance_count;
+    output[29:0] distance_count;
 
     parameter S0 = 2'b00;
     parameter S1 = 2'b01; 
@@ -28,15 +28,15 @@ module PosCounter(clk, rst, echo, distance_count);
     wire start, finish;
     reg[1:0] curr_state, next_state;
     reg echo_reg1, echo_reg2;
-    reg[19:0] count, next_count, distance_register, next_distance;
-    wire[19:0] distance_count; 
+    reg[29:0] count, next_count, distance_register, next_distance;
+    wire[29:0] distance_count; 
 
     always@(posedge clk) begin
         if(rst) begin
             echo_reg1 <= 1'b0;
             echo_reg2 <= 1'b0;
-            count <= 20'b0;
-            distance_register <= 20'b0;
+            count <= 30'b0;
+            distance_register <= 30'b0;
             curr_state <= S0;
         end
         else begin
@@ -57,7 +57,7 @@ module PosCounter(clk, rst, echo, distance_count);
                     next_count = count;
                 end else begin
                     next_state = curr_state;
-                    next_count = 20'b0;
+                    next_count = 30'b0;
                 end 
             end
             S1: begin
@@ -67,23 +67,23 @@ module PosCounter(clk, rst, echo, distance_count);
                     next_count = count;
                 end else begin
                     next_state = curr_state;
-                    next_count = (count > 20'd600_000) ? count : count + 1'b1;
+                    next_count = (count > 30'd600_000) ? count : count + 30'b1;
                 end 
             end
             S2: begin
                 next_distance = count;
-                next_count = 20'b0;
+                next_count = 30'b0;
                 next_state = S0;
             end
             default: begin
-                next_distance = 20'b0;
-                next_count = 20'b0;
+                next_distance = 30'b0;
+                next_count = 30'b0;
                 next_state = S0;
             end
         endcase
     end
 
-    assign distance_count = distance_register * 20'd100 / 20'd58; 
+    assign distance_count = distance_register * 30'd100 / 30'd58; 
     assign start = echo_reg1 & ~echo_reg2;  
     assign finish = ~echo_reg1 & echo_reg2; 
 endmodule
